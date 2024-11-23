@@ -32,6 +32,7 @@ const customers = [
     status: "active",
     lastOrder: "1,250₺",
     totalOrders: "12,350₺",
+    balance: "5,000₺",
     method: "Kredi Kartı",
     address: "İstanbul, Türkiye",
     joinDate: "15 Ocak 2023",
@@ -44,6 +45,7 @@ const customers = [
     status: "pending",
     lastOrder: "750₺",
     totalOrders: "8,150₺",
+    balance: "-2,500₺",
     method: "Havale",
     address: "Ankara, Türkiye",
     joinDate: "22 Mart 2023",
@@ -56,6 +58,7 @@ const customers = [
     status: "inactive",
     lastOrder: "2,100₺",
     totalOrders: "15,750₺",
+    balance: "8,750₺",
     method: "Kredi Kartı",
     address: "İzmir, Türkiye",
     joinDate: "5 Şubat 2023",
@@ -106,104 +109,104 @@ export function CustomersTable({ rowClassName, onRowClick }: CustomersTableProps
   }
 
   return (
-    <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12">
-              <Checkbox
-                checked={selectedCustomers.length === customers.length}
-                onCheckedChange={handleSelectAll}
-              />
-            </TableHead>
-            <TableHead className="w-[150px]">Müşteri</TableHead>
-            <TableHead>İletişim</TableHead>
-            <TableHead>Durum</TableHead>
-            <TableHead>Son Sipariş</TableHead>
-            <TableHead>Toplam</TableHead>
-            <TableHead>Katılım</TableHead>
-            <TableHead className="w-12"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {customers.map((customer) => (
-            <TableRow 
-              key={customer.id}
-              className={`${rowClassName} cursor-pointer hover:bg-muted/50`}
-              onClick={() => onRowClick && onRowClick(customer)}
-            >
-              <TableCell onClick={(e) => e.stopPropagation()}>
+    <div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-slate-50 hover:bg-slate-50">
+              <TableHead className="w-12">
                 <Checkbox
-                  checked={selectedCustomers.includes(customer.id)}
-                  onCheckedChange={() => handleSelectOne(customer.id)}
+                  checked={selectedCustomers.length === customers.length}
+                  onCheckedChange={handleSelectAll}
                 />
-              </TableCell>
-              <TableCell>
-                <div className="font-medium">{customer.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  {customer.address}
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{customer.email}</span>
-                </div>
-                <div className="flex items-center space-x-2 mt-1">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{customer.phone}</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant="secondary"
-                  className={statusMap[customer.status as keyof typeof statusMap].class}
-                >
-                  {statusMap[customer.status as keyof typeof statusMap].label}
-                </Badge>
-              </TableCell>
-              <TableCell>{customer.lastOrder}</TableCell>
-              <TableCell>{customer.totalOrders}</TableCell>
-              <TableCell>{customer.joinDate}</TableCell>
-              <TableCell onClick={(e) => e.stopPropagation()}>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="h-8 w-8 p-0"
-                    >
-                      <span className="sr-only">Menüyü aç</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => setEditingCustomer(customer)}
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      Düzenle
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" />
-                      Görüntüle
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Trash className="mr-2 h-4 w-4" />
-                      Sil
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
+                Müşteri
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("balance")}>
+                Bakiye
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
+                Durum
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("lastOrder")}>
+                Son Sipariş
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("totalOrders")}>
+                Toplam
+              </TableHead>
+              <TableHead className="w-12"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      <CustomerForm
-        isOpen={!!editingCustomer}
-        onClose={() => setEditingCustomer(null)}
-        customer={editingCustomer || undefined}
-      />
-    </>
+          </TableHeader>
+          <TableBody>
+            {customers.map((customer) => (
+              <TableRow
+                key={customer.id}
+                className={`h-12 hover:bg-slate-50 ${
+                  selectedCustomers.includes(customer.id) ? "bg-slate-50" : ""
+                } cursor-pointer transition-colors`}
+                onClick={() => router.push(`/customers/${customer.id}`)}
+              >
+                <TableCell className="p-2">
+                  <Checkbox
+                    checked={selectedCustomers.includes(customer.id)}
+                    onCheckedChange={() => handleSelectOne(customer.id)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  <div className="flex flex-col">
+                    <span className="font-medium">{customer.name}</span>
+                    <span className="text-sm text-gray-500">{customer.email}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="p-2">
+                  <span className={customer.balance.startsWith('-') ? 'text-red-600' : 'text-green-600'}>
+                    {customer.balance}
+                  </span>
+                </TableCell>
+                <TableCell className="p-2">
+                  <Badge className={statusMap[customer.status as keyof typeof statusMap].class}>
+                    {statusMap[customer.status as keyof typeof statusMap].label}
+                  </Badge>
+                </TableCell>
+                <TableCell className="p-2">{customer.lastOrder}</TableCell>
+                <TableCell className="p-2">{customer.totalOrders}</TableCell>
+                <TableCell className="p-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => router.push(`/customers/${customer.id}`)}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        Görüntüle
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setEditingCustomer(customer)}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Düzenle
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600">
+                        <Trash className="mr-2 h-4 w-4" />
+                        Sil
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {editingCustomer && (
+        <CustomerForm
+          isOpen={!!editingCustomer}
+          onClose={() => setEditingCustomer(null)}
+          customer={editingCustomer}
+        />
+      )}
+    </div>
   )
 }

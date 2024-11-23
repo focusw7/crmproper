@@ -53,7 +53,7 @@ interface Customer {
   status: string;
   lastOrder: string;
   totalOrders: string;
-  method: string;
+  paymentMethod: string;
   address: string;
   joinDate: string;
   orders: {
@@ -124,7 +124,7 @@ const customer: Customer = {
   status: "active",
   lastOrder: "1,250₺",
   totalOrders: "12,350₺",
-  method: "Kredi Kartı",
+  paymentMethod: "havale-eft",
   address: "İstanbul, Türkiye",
   joinDate: "15 Ocak 2023",
   orders: [
@@ -336,6 +336,13 @@ const equipmentTypes: EquipmentType[] = ["Laptop", "Telefon", "Tablet", "Yazıc�
 const statusTypes: string[] = ["Aktif", "Tamirde", "İptal"]
 const conditionTypes: ConditionType[] = ["İyi", "Orta", "Kötü", "Onarımda"]
 
+// Ödeme yöntemi haritası
+const paymentMethodMap = {
+  "havale-eft": "Havale/EFT",
+  "kredi-karti": "Kredi Kartı",
+  "nakit": "Nakit"
+}
+
 // ReactNode tipindeki içeriği güvenli bir şekilde render etmek için
 const renderContent = (content: unknown): React.ReactNode => {
   if (typeof content === 'string' || typeof content === 'number') {
@@ -429,7 +436,7 @@ export default function CustomerPage() {
             <CardTitle className="text-sm font-medium">Ödeme Yöntemi</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{customer.method}</div>
+            <div className="text-2xl font-bold">{paymentMethodMap[customer.paymentMethod as keyof typeof paymentMethodMap]}</div>
             <p className="text-xs text-muted-foreground">Tercih edilen</p>
           </CardContent>
         </Card>
@@ -501,6 +508,12 @@ export default function CustomerPage() {
                     <MapPin className="h-4 w-4" />
                     <p>{customer.address}</p>
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Ödeme Yöntemi
+                  </p>
+                  <p>{paymentMethodMap[customer.paymentMethod as keyof typeof paymentMethodMap]}</p>
                 </div>
               </div>
             </CardContent>

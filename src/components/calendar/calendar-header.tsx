@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react"
-import { format, addMonths, subMonths } from "date-fns"
+import { format, addMonths, subMonths, addDays, startOfWeek } from "date-fns"
 import { tr } from "date-fns/locale"
 import { CalendarViewType } from "@/types/calendar"
 
@@ -29,15 +29,39 @@ export function CalendarHeader({
   onNewEvent,
 }: CalendarHeaderProps) {
   const handlePrevMonth = () => {
-    onDateChange(subMonths(currentDate, 1))
+    if (view === "month") {
+      onDateChange(subMonths(currentDate, 1))
+    } else if (view === "week") {
+      onDateChange(addDays(currentDate, -7))
+    } else {
+      onDateChange(addDays(currentDate, -1))
+    }
   }
 
   const handleNextMonth = () => {
-    onDateChange(addMonths(currentDate, 1))
+    if (view === "month") {
+      onDateChange(addMonths(currentDate, 1))
+    } else if (view === "week") {
+      onDateChange(addDays(currentDate, 7))
+    } else {
+      onDateChange(addDays(currentDate, 1))
+    }
   }
 
   const handleToday = () => {
     onDateChange(new Date())
+  }
+
+  const getHeaderText = () => {
+    if (view === "month") {
+      return format(currentDate, "MMMM yyyy", { locale: tr })
+    } else if (view === "week") {
+      const weekStart = startOfWeek(currentDate, { locale: tr })
+      const weekEnd = addDays(weekStart, 6)
+      return `${format(weekStart, "d", { locale: tr })} - ${format(weekEnd, "d MMMM yyyy", { locale: tr })}`
+    } else {
+      return format(currentDate, "d MMMM yyyy", { locale: tr })
+    }
   }
 
   return (
@@ -58,7 +82,7 @@ export function CalendarHeader({
           </Button>
         </div>
         <h2 className="text-lg font-semibold">
-          {format(currentDate, "MMMM yyyy", { locale: tr })}
+          {getHeaderText()}
         </h2>
       </div>
       <div className="flex items-center space-x-2">

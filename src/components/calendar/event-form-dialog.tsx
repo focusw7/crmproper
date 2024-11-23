@@ -31,7 +31,7 @@ export function EventFormDialog({
       <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {event ? "Etkinliği Düzenle" : "Yeni Etkinlik"}
+            {event ? "Görevi Düzenle" : "Yeni Görev"}
           </DialogTitle>
         </DialogHeader>
         <EventForm

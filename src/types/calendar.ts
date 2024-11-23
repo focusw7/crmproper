@@ -2,15 +2,28 @@ export type EventPriority = 'low' | 'medium' | 'high'
 export type EventStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled'
 
 export interface Customer {
-  id: string | number
+  id: string
   name: string
   company: string
 }
 
 export interface Employee {
-  id: string | number
+  id: string
   name: string
   department: string
+}
+
+export type RecurrenceType = "none" | "daily" | "weekly" | "monthly" | "yearly" | "custom"
+
+export type RecurrenceEndType = "never" | "after" | "on-date"
+
+export interface RecurrenceRule {
+  type: RecurrenceType
+  interval: number
+  endType: RecurrenceEndType
+  endAfterOccurrences?: number
+  endDate?: string
+  weekDays?: string[] // ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
 }
 
 export interface CalendarEvent {
@@ -22,10 +35,11 @@ export interface CalendarEvent {
   endTime: Date
   priority: EventPriority
   status: EventStatus
-  customerId?: string | number
+  customerId?: string
   customerName?: string
-  employeeId?: string | number
+  employeeId?: string
   employeeName?: string
+  recurrence?: RecurrenceRule
   attendees?: Array<{
     id: string
     name: string
