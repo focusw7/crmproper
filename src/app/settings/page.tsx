@@ -73,15 +73,11 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="w-full justify-start">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="general">Genel</TabsTrigger>
           <TabsTrigger value="notifications">Bildirimler</TabsTrigger>
-          <TabsTrigger value="invoices">Faturalar</TabsTrigger>
-          <TabsTrigger value="customers">Müşteriler</TabsTrigger>
-          <TabsTrigger value="tasks">Görevler</TabsTrigger>
-          <TabsTrigger value="equipments">Teçhizatlar</TabsTrigger>
-          <TabsTrigger value="suppliers">Tedarikçiler</TabsTrigger>
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="appearance">Görünüm</TabsTrigger>
+          <TabsTrigger value="users">Kullanıcılar</TabsTrigger>
         </TabsList>
 
         {/* Genel Ayarlar */}
@@ -431,6 +427,28 @@ export default function SettingsPage() {
                     Değişiklikleri Kaydet
                   </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Kullanıcı Ayarları */}
+        <TabsContent value="users">
+          <Card>
+            <CardHeader>
+              <CardTitle>Kullanıcı Yönetimi</CardTitle>
+              <CardDescription>
+                Sistem kullanıcılarını buradan yönetebilirsiniz.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button
+                  onClick={() => window.location.href = '/settings/users'}
+                  variant="outline"
+                >
+                  Kullanıcı Yönetimi Sayfasına Git
+                </Button>
               </div>
             </CardContent>
           </Card>
